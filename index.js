@@ -3,6 +3,7 @@ const app = express();
 const path = require('path')
 
 const convert = require('./lib/convert')
+const apiBCB = require('./lib/api.bcb')
 
 const myLogger = (req,res,next) => {
     console.log('Logado', Date.now())
@@ -16,9 +17,14 @@ app.use(express.static(path.join(__dirname, 'public')))
 //Middleware
 app.use(myLogger)
 
-app.get("/", (req,res) =>{
+app.get("/", async (req,res) =>{
     //res.send('testando')
-    res.render('home')
+    
+    const cotacao = await apiBCB.getCotacao()
+    console.log('cotacao', cotacao)
+    res.render('home', {
+        cotacao
+    })
 })
 
 app.get("/cotacao", (req,res) =>{

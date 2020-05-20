@@ -21,9 +21,13 @@ app.get("/", async (req,res) =>{
     //res.send('testando')
     
     const cotacao = await apiBCB.getCotacao()
+    const conversao = "";
+    const quantidade= "";
     console.log('cotacao', cotacao)
     res.render('home', {
-        cotacao
+        cotacao,
+        conversao,
+        quantidade
     })
 })
 
@@ -31,14 +35,14 @@ app.get("/cotacao", (req,res) =>{
     const {cotacao, quantidade} = req.query
     if(cotacao && quantidade){
         const conversao = convert.convert(cotacao, quantidade)
-        res.render('cotacao',{
+        res.send({
             cotacao: convert.toMoney(cotacao),
             quantidade: convert.toMoney(quantidade),
             conversao: convert.toMoney(conversao),
             error: false
         })
     }else{
-        res.render('cotacao',{
+        res.send('cotacao',{
             error:'Dados inválidos'
         })
     }
